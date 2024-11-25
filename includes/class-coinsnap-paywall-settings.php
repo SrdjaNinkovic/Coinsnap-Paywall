@@ -11,9 +11,10 @@ class Coinsnap_Paywall_Settings {
 		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 
-	  // Instantiate the shortcode class
-	  $this->shortcode_class = new Coinsnap_Paywall_Shortcode();
+		// Instantiate the shortcode class
+		$this->shortcode_class = new Coinsnap_Paywall_Shortcode();
 	}
+
 	public function register_settings() {
 		register_setting( 'coinsnap_paywall', 'coinsnap_paywall_options', [
 			'type'              => 'array',
@@ -214,28 +215,71 @@ class Coinsnap_Paywall_Settings {
 			100
 		);
 
-	  // Add the Paywall Shortcodes submenu
-	  add_submenu_page(
-		  'coinsnap_paywall', // Parent slug
-		  'Paywall Shortcodes', // Page title
-		  'Paywall Shortcodes', // Menu title
-		  'manage_options', // Capability
-		  'edit.php?post_type=paywall-shortcode' // Submenu slug
-	  );
+		// Add the Paywall Shortcodes submenu
+		add_submenu_page(
+			'coinsnap_paywall', // Parent slug
+			'Paywall Shortcodes', // Page title
+			'Paywall Shortcodes', // Menu title
+			'manage_options', // Capability
+			'edit.php?post_type=paywall-shortcode' // Submenu slug
+		);
+	}
+
+	/**
+	 * Renders a specific settings section manually.
+	 *
+	 * @param string $section_id The ID of the section to render.
+	 */
+	private function render_section( $section_id ) {
+		global $wp_settings_sections, $wp_settings_fields;
+
+		if ( ! isset( $wp_settings_sections['coinsnap_paywall'][ $section_id ] ) ) {
+			return;
+		}
+
+		$section = $wp_settings_sections['coinsnap_paywall'][ $section_id ];
+
+		if ( $section['title'] ) {
+			echo '<h3>' . esc_html( $section['title'] ) . '</h3>';
+		}
+		if ( $section['callback'] ) {
+			call_user_func( $section['callback'], $section );
+		}
+
+		if ( ! empty( $wp_settings_fields['coinsnap_paywall'][ $section_id ] ) ) {
+			echo '<table class="form-table">';
+			do_settings_fields( 'coinsnap_paywall', $section_id );
+			echo '</table>';
+		}
 	}
 
 	public function settings_page_html() {
 		?>
-		<div class="wrap">
-			<h1>Coinsnap Paywall Settings</h1>
-			<form method="post" action="options.php">
-				<?php
-				settings_fields( 'coinsnap_paywall' );
-				do_settings_sections( 'coinsnap_paywall' );
-				submit_button();
-				?>
-			</form>
-		</div>
+      <div class="wrap">
+        <h1>Coinsnap Paywall Settings</h1>
+        <form method="post" action="options.php">
+			<?php
+			// Render the settings fields for the Coinsnap Paywall
+			settings_fields( 'coinsnap_paywall' );
+
+			// Render the Provider Settings Section
+			$this->render_section( 'coinsnap_paywall_provider_section' );
+
+			// Render Coinsnap Settings inside a wrapper
+			echo '<div id="coinsnap-settings-wrapper" class="provider-settings">';
+			$this->render_section( 'coinsnap_paywall_coinsnap_section' );
+			echo '</div>';
+
+			// Render BTCPay Settings inside a wrapper
+			echo '<div id="btcpay-settings-wrapper" class="provider-settings">';
+			$this->render_section( 'coinsnap_paywall_btcpay_section' );
+			echo '</div>';
+
+			// Render submit button
+			submit_button();
+			?>
+        </form>
+      </div>
 		<?php
 	}
 }

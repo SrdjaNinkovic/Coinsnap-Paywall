@@ -20,6 +20,14 @@ class Coinsnap_Paywall_Scripts {
 			true
 		);
 
+		wp_enqueue_script(
+			'coinsnap-paywall-admin',
+			plugin_dir_url( __FILE__ ) . '../assets/js/settings.js',
+			[ 'jquery' ],
+			'1.0.0',
+			true
+		);
+
 		wp_enqueue_style(
 			'coinsnap-paywall-admin',
 			plugin_dir_url( __FILE__ ) . '../assets/css/admin.css',

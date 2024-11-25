@@ -15,17 +15,19 @@ class Coinsnap_Paywall_CoinsnapHandler {
 	}
 
 	public function createInvoice( $amount, $currency, $redirectUrl ) {
-		$data =  [
+		$data = json_encode( [
 			'amount'                => $amount,
 			'currency'              => $currency,
 			'redirectUrl'           => $redirectUrl,
-//			'redirectAutomatically' => true @todo Uncomment this after this is fixed on server side.
-		];
+			'redirectAutomatically' => true
+		] );
 
 		$response = wp_remote_post( "{$this->url}/api/v1/stores/" . $this->store_id . "/invoices", [
 			'method'  => 'POST',
 			'headers' => [
-				'X-api-key'    => $this->api_key
+				'X-api-key'    => $this->api_key,
+				'Content-Type' => 'application/json',
+
 			],
 			'body'    => $data,
 			'timeout' => 60,

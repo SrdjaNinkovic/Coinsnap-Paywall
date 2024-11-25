@@ -58,3 +58,11 @@
 .shortcode-generator-container {
   margin-top: 30px;
 }
+
+.provider-settings {
+  display: none; /* Hide sections by default */
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+}
