@@ -163,12 +163,7 @@ class Coinsnap_Paywall_Shortcode_Metabox {
       <!-- Shortcode Display -->
       <div class="coinsnap-shortcode-display">
         <h3>Shortcode</h3>
-        <input
-            type="text"
-            class="large-text"
-            readonly
-            value='[paywall_payment id="<?php echo $post->ID; ?>"]'
-        >
+        <input type="text" class="large-text" readonly value='[paywall_payment id="<?php echo esc_html($post->ID); ?>"]'>
         <p class="description">Use this shortcode to display the paywall on any page or post.</p>
       </div>
 		<?php
@@ -179,8 +174,8 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 
 		// Check nonce for security
-		if (!isset($_POST['coinsnap_paywall_shortcode_nonce']) ||
-		    !wp_verify_nonce($_POST['coinsnap_paywall_shortcode_nonce'], 'coinsnap_paywall_shortcode_nonce')
+		if (!isset(filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS)) ||
+		    !wp_verify_nonce(filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS), 'coinsnap_paywall_shortcode_nonce')
 		) return;
 
 		// Check user permissions
@@ -200,15 +195,15 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 		];
 
 		foreach ($meta_fields as $key => $field) {
-			if (isset($_POST[$field])) {
+			if (null !== filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
 				$value = match($key) {
-					'description' => sanitize_textarea_field($_POST[$field]),
-					'button_text' => sanitize_text_field($_POST[$field]),
-					'price'       => floatval($_POST[$field]),
-					'currency'    => in_array($_POST[$field], ['SATS', 'EUR', 'USD']) ? $_POST[$field] : 'SATS',
-					'duration'    => intval($_POST[$field]),
-					'theme'       => in_array($_POST[$field], ['light', 'dark']) ? $_POST[$field] : 'light',
-					default      => sanitize_text_field($_POST[$field])
+					'description' => sanitize_textarea_field(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS)),
+					'button_text' => sanitize_text_field(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS)),
+					'price'       => floatval(filter_input(INPUT_POST,$field,FILTER_VALIDATE_FLOAT)),
+					'currency'    => in_array(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS), ['SATS', 'EUR', 'USD']) ? filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS) : 'SATS',
+					'duration'    => intval(filter_input(INPUT_POST,$field,FILTER_VALIDATE_INT)),
+					'theme'       => in_array(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS), ['light', 'dark']) ? filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS) : 'light',
+					default      => sanitize_text_field(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS))
 				};
 
 				update_post_meta($post_id, '_' . $field, $value);

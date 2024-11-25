@@ -37,7 +37,7 @@ class Coinsnap_Paywall_Shortcode {
            data-price="<?php echo esc_attr($price); ?>"
            data-currency="<?php echo esc_attr($currency); ?>"
            data-duration="<?php echo esc_attr($duration); ?>"
-           data-post-id="<?php echo get_the_ID(); ?>"
+           data-post-id="<?php echo esc_html(get_the_ID()); ?>"
       >
         <h2><?php echo esc_html($shortcode_post->post_title); ?></h2>
         <p><?php echo esc_html($description); ?></p>

@@ -1,11 +1,7 @@
-# Coinsnap Bitcoin Paywall #
-![Coinsnap Bitcoin Paywall Plugin for Wordpress](/blob/main/assets/images/cover.png)
-
-## Wordpress plugin for implementing Paywall using Coinsnap and BTCPay ##
-
+=== Coinsnap Bitcoin Paywall ===
 Contributors: coinsnap
-Tags: Lightning, Lightning Payment, SATS, Satoshi sats, bitcoin, Wordpress, Paywall, BTCPay, accept bitcoin, bitcoin plugin, bitcoin payment processor, bitcoin e-commerce, Lightning Network, cryptocurrency, lightning payment processor
-Requires at least: 5.2
+Tags: Lightning, SATS, bitcoin, Paywall, BTCPay
+Requires at least: 6.2
 Tested up to: 6.7.1
 Requires PHP: 7.4
 Stable tag: 1.0.0
@@ -66,3 +62,21 @@ The Coinsnap Bitcoin Paywall plugin allows you to implement Paywall and accept B
 * [Privacy Policy](https://coinsnap.io/en/privacy/)
 
 
+== Installation ==
+
+### Upgrade Notice ###
+
+Follow updates on plugin's GitHub page:
+https://github.com/Coinsnap/Coinsnap-for-Contactform7
+
+### Frequently Asked Questions ###
+
+Plugin's page on Coinsnap website: https://coinsnap.io/en/
+
+== Screenshots ==
+
+ 
+# Changelog #
+
+= 1.0.0 :: 2024-07-08 =
+* Initial release. 

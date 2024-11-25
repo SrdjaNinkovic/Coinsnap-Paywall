@@ -15,11 +15,12 @@ class Coinsnap_Paywall_CoinsnapHandler {
 	}
 
 	public function createInvoice( $amount, $currency, $redirectUrl ) {
-		$data = json_encode( [
+		$data = wp_json_encode( [
 			'amount'                => $amount,
 			'currency'              => $currency,
 			'redirectUrl'           => $redirectUrl,
-			'redirectAutomatically' => true
+			'redirectAutomatically' => true,
+                        'referralCode' => COINSNAP_REFERRAL_CODE
 		] );
 
 		$response = wp_remote_post( "{$this->url}/api/v1/stores/" . $this->store_id . "/invoices", [

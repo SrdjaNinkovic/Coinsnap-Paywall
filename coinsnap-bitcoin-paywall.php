@@ -1,29 +1,37 @@
 <?php
 /*
-Plugin Name: Coinsnap Paywall
-Plugin URI:      https://www.coinsnap.io
-Description: A plugin for Paywall using Coinsnap and BTCPay.
-Version: 1.0
-Author:          Coinsnap
-Author URI:      https://coinsnap.io/
-Text Domain:     coinsnap-paywall
-*/
-
-global $wpdb;
-$table_name = $wpdb->prefix . 'coinsnap_paywall_access';
-
-$sql = "CREATE TABLE IF NOT EXISTS $table_name (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    post_id INT NOT NULL,
-    session_id INT NOT NULL,
-    access_expires DATETIME NOT NULL
-)";
-
-$wpdb->query( $sql );
+ * Plugin Name:        Coinsnap Bitcoin Paywall
+ * Plugin URI:         https://coinsnap.io
+ * Description:        A plugin for Paywall using Coinsnap and BTCPay.
+ * Version:            1.0.0
+ * Author:             Coinsnap
+ * Author URI:         https://coinsnap.io/
+ * Text Domain:        coinsnap-bitcoin-paywall
+ * Domain Path:         /languages
+ * Requires PHP:        7.4
+ * Tested up to:        6.7.1
+ * Requires at least:   6.2
+ * License:             GPL2
+ * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Network:             true
+ */ 
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+define( 'COINSNAP_REFERRAL_CODE', 'D72896' );
+
+global $wpdb;
+$table_name = $wpdb->prefix . 'coinsnap_paywall_access';
+
+$wpdb->query($wpdb->prepare("CREATE TABLE IF NOT EXISTS %i (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    session_id INT NOT NULL,
+    access_expires DATETIME NOT NULL)",$table_name));
+
+
 register_uninstall_hook( __FILE__, 'coinsnap_paywall_uninstall' );
 
 /**
@@ -36,7 +44,7 @@ function coinsnap_paywall_uninstall() {
 	$table_name = $wpdb->prefix . 'coinsnap_paywall_access';
 
 	// Drop the table
-	$wpdb->query( "DROP TABLE IF EXISTS $table_name" );
+	$wpdb->query( $wpdb->prepare("DROP TABLE IF EXISTS %i",$table_name) );
 }
 
 // Include the handler classes
@@ -65,11 +73,11 @@ class CoinsnapPaywall {
 	}
 
 	public function check_invoice_status() {
-		if ( ! isset( $_POST['invoice_id'] ) ) {
+		if ( null === filter_input(INPUT_POST,'invoice_id',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ) {
 			wp_send_json_error( 'Invoice ID is required' );
 		}
 
-		$invoice_id = sanitize_text_field( $_POST['invoice_id'] );
+		$invoice_id = sanitize_text_field( filter_input(INPUT_POST,'invoice_id',FILTER_SANITIZE_FULL_SPECIAL_CHARS) );
 		$provider   = get_option( 'coinsnap_paywall_options' )['provider'];
 
 		$handler = $this->get_provider_handler( $provider );
@@ -91,14 +99,14 @@ class CoinsnapPaywall {
 	}
 
 	public function create_invoice() {
-		if ( empty( $_POST['amount'] ) || empty( $_POST['currency'] ) ) {
+		if ( empty( filter_input(INPUT_POST,'amount',FILTER_VALIDATE_FLOAT) ) || empty( filter_input(INPUT_POST,'currency',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ) ) {
 			wp_send_json_error( [ 'message' => 'Invalid request parameters.' ] );
 		}
 
 		$provider    = get_option( 'coinsnap_paywall_options' )['provider'];
-		$price       =  sanitize_text_field( $_POST['amount'] );
-		$currency    = sanitize_text_field( $_POST['currency'] );
-		$redirectUrl = sanitize_text_field( $_POST['currentPage'] );
+		$price       =  sanitize_text_field( filter_input(INPUT_POST,'amount',FILTER_VALIDATE_FLOAT) );
+		$currency    = sanitize_text_field( filter_input(INPUT_POST,'currency',FILTER_SANITIZE_FULL_SPECIAL_CHARS) );
+		$redirectUrl = sanitize_text_field( filter_input(INPUT_POST,'currentPage',FILTER_SANITIZE_FULL_SPECIAL_CHARS) );
 
 		$handler = $this->get_provider_handler( $provider );
 
@@ -109,12 +117,15 @@ class CoinsnapPaywall {
 		$invoice = $handler->createInvoice( $price, $currency, $redirectUrl );
 
 		if ( $invoice && isset( $invoice['data']['checkoutLink'] ) ) {
+                    
+                    
+                    
 			$ids = [
 				'invoice_id' => $invoice['data']['id'] ?? null,
-				'post_id'    => $_POST['postId'] ?? null,
+				'post_id'    => filter_input(INPUT_POST,'postId',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? null,
 			];
 
-			setcookie( 'coinsnap_initiated_' . ($_POST['postId'] ?? ''), json_encode( $ids ), time() + 900, '/' );
+			setcookie( 'coinsnap_initiated_' . (filter_input(INPUT_POST,'postId',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? ''), wp_json_encode( $ids ), time() + 900, '/' );
 
 			wp_send_json_success( [ 'invoice_url' => $invoice['data']['checkoutLink'] ] );
 		} else {
@@ -154,8 +165,8 @@ class CoinsnapPaywall {
 		$table_name = $wpdb->prefix . 'coinsnap_paywall_access';
 
 		$access = $wpdb->get_row( $wpdb->prepare(
-			"SELECT * FROM $table_name WHERE post_id = %d AND session_id = %s AND access_expires > NOW()",
-			$post_id, $session_id
+			"SELECT * FROM %i WHERE post_id = %d AND session_id = %s AND access_expires > NOW()",
+			$table_name, $post_id, $session_id
 		) );
 
 		return $access !== null;
@@ -170,12 +181,12 @@ class CoinsnapPaywall {
 		// Debug incoming data
 		error_log( print_r( $_POST, true ) );
 
-		if ( empty( $_POST['post_id'] ) || empty( $_POST['duration'] ) ) {
+		if ( empty( filter_input(INPUT_POST,'post_id',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ) || empty( filter_input(INPUT_POST,'duration',FILTER_VALIDATE_INT) ) ) {
 			wp_send_json_error( 'Missing required parameters' );
 		}
 
-		$post_id  = sanitize_text_field( $_POST['post_id'] );
-		$duration = intval( $_POST['duration'] );
+		$post_id  = sanitize_text_field( filter_input(INPUT_POST,'post_id',FILTER_SANITIZE_FULL_SPECIAL_CHARS) );
+		$duration = intval( filter_input(INPUT_POST,'duration',FILTER_VALIDATE_INT) );
 
 		// Debug session_id
 		error_log( 'Session ID: ' . $session_id );
@@ -184,7 +195,7 @@ class CoinsnapPaywall {
 			wp_send_json_error( 'Session not initialized' );
 		}
 
-		$access_expires = date( 'Y-m-d H:i:s', time() + ( $duration * 3600 ) );
+		$access_expires = gmdate( 'Y-m-d H:i:s', time() + ( $duration * 3600 ) );
 
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'coinsnap_paywall_access';

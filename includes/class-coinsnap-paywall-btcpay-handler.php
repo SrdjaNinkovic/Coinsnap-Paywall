@@ -15,7 +15,7 @@ class Coinsnap_Paywall_BTCPayHandler {
 	}
 
 	public function createInvoice( $amount, $currency, $redirectUrl ) {
-		$data = json_encode( [
+		$data = wp_json_encode( [
 			'amount'   => $amount,
 			'currency' => $currency,
 			'checkout' => [
