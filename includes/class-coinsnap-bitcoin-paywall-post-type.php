@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class Coinsnap_Paywall_Shortcode_Metabox {
+class Coinsnap_Bitcoin_Paywall_Shortcode_Metabox {
 	public function __construct() {
 		// Register custom post type
 		add_action('init', [$this, 'register_paywall_shortcode_post_type']);
@@ -49,7 +49,7 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 
 	public function add_paywall_shortcode_metaboxes() {
 		add_meta_box(
-			'coinsnap_paywall_shortcode_details',
+			'coinsnap_bitcoin_paywall_shortcode_details',
 			'Paywall Shortcode Details',
 			[$this, 'render_paywall_shortcode_metabox'],
 			'paywall-shortcode',
@@ -60,25 +60,25 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 
 	public function render_paywall_shortcode_metabox($post) {
 		// Add nonce for security
-		wp_nonce_field('coinsnap_paywall_shortcode_nonce', 'coinsnap_paywall_shortcode_nonce');
+		wp_nonce_field('coinsnap_bitcoin_paywall_shortcode_nonce', 'coinsnap_bitcoin_paywall_shortcode_nonce');
 
 		// Retrieve existing meta values
-		$description = get_post_meta($post->ID, '_coinsnap_paywall_description', true);
-		$button_text = get_post_meta($post->ID, '_coinsnap_paywall_button_text', true);
-		$price = get_post_meta($post->ID, '_coinsnap_paywall_price', true);
-		$currency = get_post_meta($post->ID, '_coinsnap_paywall_currency', true);
-		$duration = get_post_meta($post->ID, '_coinsnap_paywall_duration', true);
-		$theme = get_post_meta($post->ID, '_coinsnap_paywall_theme', true);
+		$description = get_post_meta($post->ID, '_coinsnap_bitcoin_paywall_description', true);
+		$button_text = get_post_meta($post->ID, '_coinsnap_bitcoin_paywall_button_text', true);
+		$price = get_post_meta($post->ID, '_coinsnap_bitcoin_paywall_price', true);
+		$currency = get_post_meta($post->ID, '_coinsnap_bitcoin_paywall_currency', true);
+		$duration = get_post_meta($post->ID, '_coinsnap_bitcoin_paywall_duration', true);
+		$theme = get_post_meta($post->ID, '_coinsnap_bitcoin_paywall_theme', true);
 		?>
       <table class="form-table">
         <tr>
           <th scope="row">
-            <label for="coinsnap_paywall_description">Description</label>
+            <label for="coinsnap_bitcoin_paywall_description">Description</label>
           </th>
           <td>
                     <textarea
-                        id="coinsnap_paywall_description"
-                        name="coinsnap_paywall_description"
+                        id="coinsnap_bitcoin_paywall_description"
+                        name="coinsnap_bitcoin_paywall_description"
                         class="large-text"
                         rows="4"
                     ><?php echo esc_textarea($description); ?></textarea>
@@ -86,13 +86,13 @@ class Coinsnap_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_paywall_button_text">Button Text</label>
+            <label for="coinsnap_bitcoin_paywall_button_text">Button Text</label>
           </th>
           <td>
             <input
                 type="text"
-                id="coinsnap_paywall_button_text"
-                name="coinsnap_paywall_button_text"
+                id="coinsnap_bitcoin_paywall_button_text"
+                name="coinsnap_bitcoin_paywall_button_text"
                 class="regular-text"
                 value="<?php echo esc_attr($button_text ?: 'Pay Now'); ?>"
             >
@@ -100,13 +100,13 @@ class Coinsnap_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_paywall_price">Price</label>
+            <label for="coinsnap_bitcoin_paywall_price">Price</label>
           </th>
           <td>
             <input
                 type="number"
-                id="coinsnap_paywall_price"
-                name="coinsnap_paywall_price"
+                id="coinsnap_bitcoin_paywall_price"
+                name="coinsnap_bitcoin_paywall_price"
                 class="regular-text"
                 step="0.01"
                 min="0"
@@ -116,12 +116,12 @@ class Coinsnap_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_paywall_currency">Currency</label>
+            <label for="coinsnap_bitcoin_paywall_currency">Currency</label>
           </th>
           <td>
             <select
-                id="coinsnap_paywall_currency"
-                name="coinsnap_paywall_currency"
+                id="coinsnap_bitcoin_paywall_currency"
+                name="coinsnap_bitcoin_paywall_currency"
             >
               <option value="SATS" <?php selected($currency, 'SATS'); ?>>SATS</option>
               <option value="EUR" <?php selected($currency, 'EUR'); ?>>EUR</option>
@@ -131,13 +131,13 @@ class Coinsnap_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_paywall_duration">Duration (hours)</label>
+            <label for="coinsnap_bitcoin_paywall_duration">Duration (hours)</label>
           </th>
           <td>
             <input
                 type="number"
-                id="coinsnap_paywall_duration"
-                name="coinsnap_paywall_duration"
+                id="coinsnap_bitcoin_paywall_duration"
+                name="coinsnap_bitcoin_paywall_duration"
                 class="regular-text"
                 min="1"
                 value="<?php echo esc_attr($duration ?: '24'); ?>"
@@ -146,12 +146,12 @@ class Coinsnap_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_paywall_theme">Theme</label>
+            <label for="coinsnap_bitcoin_paywall_theme">Theme</label>
           </th>
           <td>
             <select
-                id="coinsnap_paywall_theme"
-                name="coinsnap_paywall_theme"
+                id="coinsnap_bitcoin_paywall_theme"
+                name="coinsnap_bitcoin_paywall_theme"
             >
               <option value="light" <?php selected($theme, 'light'); ?>>Light</option>
               <option value="dark" <?php selected($theme, 'dark'); ?>>Dark</option>
@@ -174,8 +174,8 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 
 		// Check nonce for security
-		if (null === filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ||
-		    !wp_verify_nonce(filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS), 'coinsnap_paywall_shortcode_nonce')
+		if (null === filter_input(INPUT_POST,'coinsnap_bitcoin_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ||
+		    !wp_verify_nonce(filter_input(INPUT_POST,'coinsnap_bitcoin_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS), 'coinsnap_bitcoin_paywall_shortcode_nonce')
                 ){ return;}
 
 		// Check user permissions
@@ -186,12 +186,12 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 
 		// Sanitize and save meta fields
 		$meta_fields = [
-			'description'   => 'coinsnap_paywall_description',
-			'button_text'   => 'coinsnap_paywall_button_text',
-			'price'         => 'coinsnap_paywall_price',
-			'currency'      => 'coinsnap_paywall_currency',
-			'duration'      => 'coinsnap_paywall_duration',
-			'theme'         => 'coinsnap_paywall_theme'
+			'description'   => 'coinsnap_bitcoin_paywall_description',
+			'button_text'   => 'coinsnap_bitcoin_paywall_button_text',
+			'price'         => 'coinsnap_bitcoin_paywall_price',
+			'currency'      => 'coinsnap_bitcoin_paywall_currency',
+			'duration'      => 'coinsnap_bitcoin_paywall_duration',
+			'theme'         => 'coinsnap_bitcoin_paywall_theme'
 		];
                 
                 $meta_fields_types = [
@@ -238,10 +238,10 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 	public function populate_custom_columns($column, $post_id) {
 		switch ($column) {
 			case 'price':
-				echo esc_html(get_post_meta($post_id, '_coinsnap_paywall_price', true) ?: '0');
+				echo esc_html(get_post_meta($post_id, '_coinsnap_bitcoin_paywall_price', true) ?: '0');
 				break;
 			case 'currency':
-				echo esc_html(get_post_meta($post_id, '_coinsnap_paywall_currency', true) ?: 'SATS');
+				echo esc_html(get_post_meta($post_id, '_coinsnap_bitcoin_paywall_currency', true) ?: 'SATS');
 				break;
 			case 'shortcode':
 				echo '<code>[paywall_payment id="' . esc_attr($post_id) . '"]</code>';
@@ -251,4 +251,4 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 }
 
 // Initialize the class
-new Coinsnap_Paywall_Shortcode_Metabox();
+new Coinsnap_Bitcoin_Paywall_Shortcode_Metabox();
