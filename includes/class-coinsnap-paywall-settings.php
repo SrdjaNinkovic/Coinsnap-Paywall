@@ -204,10 +204,10 @@ class Coinsnap_Paywall_Settings {
 	}
 
 	public function add_menu_page() {
-		// Add a top-level menu page for Coinsnap Paywall
+		// Add a top-level menu page for Coinsnap Bitcoin Paywall
 		add_menu_page(
-			'Coinsnap Paywall',
-			'Coinsnap Paywall',
+			'Coinsnap Bitcoin Paywall',
+			'Coinsnap Bitcoin Paywall',
 			'manage_options',
 			'coinsnap_paywall',
 			[ $this, 'settings_page_html' ],
@@ -256,10 +256,10 @@ class Coinsnap_Paywall_Settings {
 	public function settings_page_html() {
 		?>
       <div class="wrap">
-        <h1>Coinsnap Paywall Settings</h1>
+        <h1>Coinsnap Bitcoin Paywall Settings</h1>
         <form method="post" action="options.php">
 			<?php
-			// Render the settings fields for the Coinsnap Paywall
+			// Render the settings fields for the Coinsnap Bitcoin Paywall
 			settings_fields( 'coinsnap_paywall' );
 
 			// Render the Provider Settings Section
