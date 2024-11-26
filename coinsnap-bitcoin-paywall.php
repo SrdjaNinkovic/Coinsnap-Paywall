@@ -17,22 +17,23 @@
  * Network:             true
  */ 
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 define( 'COINSNAP_REFERRAL_CODE', 'D72896' );
+define( 'COINSNAP_VERSION', '1.0.0' );
 
-global $wpdb;
-$table_name = $wpdb->prefix . 'coinsnap_paywall_access';
-
-$wpdb->query($wpdb->prepare("CREATE TABLE IF NOT EXISTS %i (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    post_id INT NOT NULL,
-    session_id INT NOT NULL,
-    access_expires DATETIME NOT NULL)",$table_name));
-
-
+register_activation_hook( __FILE__, "coinsnap_paywall_activate" );
 register_uninstall_hook( __FILE__, 'coinsnap_paywall_uninstall' );
+
+function coinsnap_paywall_activate(){
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'coinsnap_paywall_access';
+
+    $wpdb->query($wpdb->prepare("CREATE TABLE IF NOT EXISTS %i (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        post_id INT NOT NULL,
+        session_id INT NOT NULL,
+        access_expires DATETIME NOT NULL)",$table_name));
+}
 
 /**
  * Uninstall callback to clean up the database.
@@ -104,7 +105,7 @@ class CoinsnapPaywall {
 		}
 
 		$provider    = get_option( 'coinsnap_paywall_options' )['provider'];
-		$price       =  sanitize_text_field( filter_input(INPUT_POST,'amount',FILTER_VALIDATE_FLOAT) );
+		$price       = sanitize_text_field( filter_input(INPUT_POST,'amount',FILTER_VALIDATE_FLOAT) );
 		$currency    = sanitize_text_field( filter_input(INPUT_POST,'currency',FILTER_SANITIZE_FULL_SPECIAL_CHARS) );
 		$redirectUrl = sanitize_text_field( filter_input(INPUT_POST,'currentPage',FILTER_SANITIZE_FULL_SPECIAL_CHARS) );
 
