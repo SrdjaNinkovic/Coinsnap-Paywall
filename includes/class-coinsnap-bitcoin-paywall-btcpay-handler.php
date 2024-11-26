@@ -3,32 +3,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Coinsnap_Paywall_CoinsnapHandler {
+class Coinsnap_Bitcoin_Paywall_BTCPayHandler {
 	private $store_id;
 	private $api_key;
 	private $url;
 
-	public function __construct( $store_id, $api_key ) {
+	public function __construct( $store_id, $api_key, $url ) {
 		$this->store_id = $store_id;
 		$this->api_key  = $api_key;
-		$this->url      = 'https://app.coinsnap.io';
+		$this->url      = rtrim( $url, '/' );
 	}
 
 	public function createInvoice( $amount, $currency, $redirectUrl ) {
 		$data = wp_json_encode( [
-			'amount'                => $amount,
-			'currency'              => $currency,
-			'redirectUrl'           => $redirectUrl,
-			'redirectAutomatically' => true,
-                        'referralCode' => COINSNAP_REFERRAL_CODE
+			'amount'   => $amount,
+			'currency' => $currency,
+			'checkout' => [
+				'redirectUrl'           => $redirectUrl,
+				'redirectAutomatically' => true,
+			]
 		] );
 
 		$response = wp_remote_post( "{$this->url}/api/v1/stores/" . $this->store_id . "/invoices", [
 			'method'  => 'POST',
 			'headers' => [
-				'X-api-key'    => $this->api_key,
-				'Content-Type' => 'application/json',
-
+				'Authorization' => 'token ' . $this->api_key,
+				'Content-Type'  => 'application/json'
 			],
 			'body'    => $data,
 			'timeout' => 60,
@@ -36,7 +36,7 @@ class Coinsnap_Paywall_CoinsnapHandler {
 
 		// Enhanced error handling
 		if ( is_wp_error( $response ) ) {
-			error_log( 'Coinsnap Invoice Creation Error: ' . $response->get_error_message() );
+			error_log( 'BTCPay Invoice Creation Error: ' . $response->get_error_message() );
 
 			return [
 				'success' => false,
@@ -49,7 +49,7 @@ class Coinsnap_Paywall_CoinsnapHandler {
 
 		// Check HTTP status code
 		if ( $response_code !== 200 ) {
-			error_log( 'Coinsnap Invoice Creation HTTP Error: ' . $response_code . ' - ' . $body );
+			error_log( 'BTCPay Invoice Creation HTTP Error: ' . $response_code . ' - ' . $body );
 
 			return [
 				'success' => false,
@@ -81,7 +81,8 @@ class Coinsnap_Paywall_CoinsnapHandler {
 
 		// Set the request headers
 		$headers = [
-			'X-api-key'    => $this->api_key
+			'Authorization' => 'token ' . $this->api_key,
+			'Content-Type'  => 'application/json'
 		];
 
 		// Make the GET request to BTCPay API
