@@ -174,15 +174,15 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 
 		// Check nonce for security
-		if (null !== filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ||
+		if (null === filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ||
 		    !wp_verify_nonce(filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS), 'coinsnap_paywall_shortcode_nonce')
-		) return;
+                ){ return;}
 
 		// Check user permissions
-		if (!current_user_can('edit_post', $post_id)) return;
+                if (!current_user_can('edit_post', $post_id)){ return; }
 
 		// Check post type
-		if ($post->post_type !== 'paywall-shortcode') return;
+                if ($post->post_type !== 'paywall-shortcode'){ return; }
 
 		// Sanitize and save meta fields
 		$meta_fields = [
@@ -193,17 +193,28 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 			'duration'      => 'coinsnap_paywall_duration',
 			'theme'         => 'coinsnap_paywall_theme'
 		];
+                
+                $meta_fields_types = [
+			$meta_fields['description']   => 'FILTER_SANITIZE_FULL_SPECIAL_CHARS',
+			$meta_fields['button_text']   => 'FILTER_SANITIZE_FULL_SPECIAL_CHARS',
+			$meta_fields['price']         => 'FILTER_VALIDATE_FLOAT',
+			$meta_fields['currency']      => 'FILTER_SANITIZE_FULL_SPECIAL_CHARS',
+			$meta_fields['duration']      => 'FILTER_VALIDATE_INT',
+			$meta_fields['theme']         => 'FILTER_SANITIZE_FULL_SPECIAL_CHARS'
+		];
+                
+                $post_array_filtered = filter_input_array(INPUT_POST, $meta_fields_types);
 
 		foreach ($meta_fields as $key => $field) {
-			if (null !== filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
+			if (isset($post_array_filtered[$field])) {
 				$value = match($key) {
-					'description' => sanitize_textarea_field(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS)),
-					'button_text' => sanitize_text_field(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS)),
-					'price'       => floatval(filter_input(INPUT_POST,$field,FILTER_VALIDATE_FLOAT)),
-					'currency'    => in_array(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS), ['SATS', 'EUR', 'USD']) ? filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS) : 'SATS',
-					'duration'    => intval(filter_input(INPUT_POST,$field,FILTER_VALIDATE_INT)),
-					'theme'       => in_array(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS), ['light', 'dark']) ? filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS) : 'light',
-					default      => sanitize_text_field(filter_input(INPUT_POST,$field,FILTER_SANITIZE_FULL_SPECIAL_CHARS))
+					'description' => sanitize_textarea_field($post_array_filtered[$field]),
+					'button_text' => sanitize_text_field($post_array_filtered[$field]),
+					'price'       => floatval($post_array_filtered[$field]),
+					'currency'    => in_array($post_array_filtered[$field], ['SATS', 'EUR', 'USD']) ? $post_array_filtered[$field] : 'SATS',
+					'duration'    => intval($post_array_filtered[$field]),
+					'theme'       => in_array($post_array_filtered[$field], ['light', 'dark']) ? $post_array_filtered[$field] : 'light',
+					default      => sanitize_text_field($post_array_filtered[$field])
 				};
 
 				update_post_meta($post_id, '_' . $field, $value);
