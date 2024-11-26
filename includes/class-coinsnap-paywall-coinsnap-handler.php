@@ -20,7 +20,7 @@ class Coinsnap_Paywall_CoinsnapHandler {
 			'currency'              => $currency,
 			'redirectUrl'           => $redirectUrl,
 			'redirectAutomatically' => true,
-                        'referralCode' => COINSNAP_REFERRAL_CODE
+                        'referralCode' => COINSNAP_PAYWALL_REFERRAL_CODE
 		] );
 
 		$response = wp_remote_post( "{$this->url}/api/v1/stores/" . $this->store_id . "/invoices", [

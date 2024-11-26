@@ -18,8 +18,8 @@
  */ 
 
 defined( 'ABSPATH' ) || exit;
-define( 'COINSNAP_REFERRAL_CODE', 'D72896' );
-define( 'COINSNAP_VERSION', '1.0.0' );
+if(!defined( 'COINSNAP_PAYWALL_REFERRAL_CODE' )){ define( 'COINSNAP_PAYWALL_REFERRAL_CODE', 'D72896' ); }
+if(!defined( 'COINSNAP_PAYWALL_VERSION' )){ define( 'COINSNAP_PAYWALL_VERSION', '1.0.0' ); }
 
 register_activation_hook( __FILE__, "coinsnap_paywall_activate" );
 register_uninstall_hook( __FILE__, 'coinsnap_paywall_uninstall' );
