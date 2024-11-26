@@ -174,7 +174,7 @@ class Coinsnap_Paywall_Shortcode_Metabox {
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 
 		// Check nonce for security
-		if (!isset(filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS)) ||
+		if (null !== filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ||
 		    !wp_verify_nonce(filter_input(INPUT_POST,'coinsnap_paywall_shortcode_nonce',FILTER_SANITIZE_FULL_SPECIAL_CHARS), 'coinsnap_paywall_shortcode_nonce')
 		) return;
 
