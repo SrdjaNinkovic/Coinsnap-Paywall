@@ -92,6 +92,7 @@ class CoinsnapBticoinPaywall {
 		add_action( 'wp_ajax_nopriv_coinsnap_create_invoice', [ $this, 'create_invoice' ] );
 
 		// Restrict content
+	  add_action( 'init', [$this, 'start_custom_session'], 1 );
 		add_filter( 'the_content', [ $this, 'restrict_page_content' ] );
 
 		add_action( 'wp_ajax_check_invoice_status', [ $this, 'check_invoice_status' ] );
@@ -105,6 +106,12 @@ class CoinsnapBticoinPaywall {
 			$this,
 			'coinsnap_bitcoin_paywall_grant_access'
 		] );
+	}
+
+	function start_custom_session() {
+		if ( session_status() === PHP_SESSION_NONE ) {
+			session_start();
+		}
 	}
 
 	public function check_invoice_status() {
@@ -250,28 +257,47 @@ class CoinsnapBticoinPaywall {
 		wp_send_json_success();
 	}
 
-
 	public function restrict_page_content( $content ) {
+		// Start the session if it hasn't been started already
 		if ( session_status() === PHP_SESSION_NONE ) {
 			session_start();
 		}
-		// Get and use the session ID
+
+		// Ensure the session ID is set
+		if ( empty( session_id() ) ) {
+			// Optionally, generate a unique session ID or trigger an error if needed
+			session_regenerate_id();
+		}
+
 		$session_id = session_id();
 		$post_id    = get_the_ID();
 
-		if ( has_shortcode( $content, 'paywall_payment' ) && ! $this->coinsnap_bitcoin_paywall_has_access( $post_id, $session_id ) ) {
-			$parts           = explode( '[paywall_payment', $content );
-			$shortcode_parts = explode( ']', $parts[1], 2 );
-			$shortcode       = '[paywall_payment' . $shortcode_parts[0] . ']';
+		// Check if the condition is met (user has access)
+		$has_access = $this->coinsnap_bitcoin_paywall_has_access( $post_id, $session_id );
 
-			return $parts[0] . $shortcode;
-		} elseif ( has_shortcode( $content, 'paywall_payment' ) && $this->coinsnap_bitcoin_paywall_has_access( $post_id, $session_id ) ) {
-			$content = preg_replace( '/\[paywall_payment[^\]]*\]/', '', $content );
+	  return $this->process_native_content( $content, $has_access );
+	}
 
-			return $content;
+
+	private function process_native_content( $content, $has_access ) {
+		if ( strpos( $content, '[paywall_payment' ) !== false ) {
+			if ( $has_access ) {
+				$content = preg_replace( '/\[paywall_payment[^\]]*\]/', '', $content );
+				return $content;
+
+      } else {
+
+				// Restrict content and show paywall up to the shortcode
+				$parts           = explode( '[paywall_payment', $content );
+				$shortcode_parts = explode( ']', $parts[1], 2 );
+				$shortcode       = '[paywall_payment' . $shortcode_parts[0] . ']';
+
+				return $parts[0] . $shortcode;
+			}
 		}
 
-		return $content;
+		return $content; // Return as-is if no shortcode
+
 	}
 }
 
