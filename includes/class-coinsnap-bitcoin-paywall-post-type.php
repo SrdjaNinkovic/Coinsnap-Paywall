@@ -73,7 +73,7 @@ class Coinsnap_Bitcoin_Paywall_Shortcode_Metabox {
       <table class="form-table">
         <tr>
           <th scope="row">
-            <label for="coinsnap_bitcoin_paywall_description">Description</label>
+            <label for="coinsnap_bitcoin_paywall_description"><?php echo esc_html_e('Description','coinsnap-bitcoin-paywall')?></label>
           </th>
           <td>
                     <textarea
@@ -86,7 +86,7 @@ class Coinsnap_Bitcoin_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_bitcoin_paywall_button_text">Button Text</label>
+            <label for="coinsnap_bitcoin_paywall_button_text"><?php echo esc_html_e('Button Text','coinsnap-bitcoin-paywall')?></label>
           </th>
           <td>
             <input
@@ -100,7 +100,7 @@ class Coinsnap_Bitcoin_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_bitcoin_paywall_price">Price</label>
+            <label for="coinsnap_bitcoin_paywall_price"><?php echo esc_html_e('Price','coinsnap-bitcoin-paywall')?></label>
           </th>
           <td>
             <input
@@ -116,7 +116,7 @@ class Coinsnap_Bitcoin_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_bitcoin_paywall_currency">Currency</label>
+            <label for="coinsnap_bitcoin_paywall_currency"><?php echo esc_html_e('Currency','coinsnap-bitcoin-paywall')?></label>
           </th>
           <td>
             <select
@@ -131,7 +131,7 @@ class Coinsnap_Bitcoin_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_bitcoin_paywall_duration">Duration (hours)</label>
+            <label for="coinsnap_bitcoin_paywall_duration"><?php echo esc_html_e('Duration (hours)','coinsnap-bitcoin-paywall')?></label>
           </th>
           <td>
             <input
@@ -146,15 +146,12 @@ class Coinsnap_Bitcoin_Paywall_Shortcode_Metabox {
         </tr>
         <tr>
           <th scope="row">
-            <label for="coinsnap_bitcoin_paywall_theme">Theme</label>
+            <label for="coinsnap_bitcoin_paywall_theme"><?php echo esc_html_e('Theme','coinsnap-bitcoin-paywall')?></label>
           </th>
           <td>
-            <select
-                id="coinsnap_bitcoin_paywall_theme"
-                name="coinsnap_bitcoin_paywall_theme"
-            >
-              <option value="light" <?php selected($theme, 'light'); ?>>Light</option>
-              <option value="dark" <?php selected($theme, 'dark'); ?>>Dark</option>
+            <select id="coinsnap_bitcoin_paywall_theme" name="coinsnap_bitcoin_paywall_theme">
+              <option value="light" <?php selected($theme, 'light'); ?>><?php echo esc_html_e('Light','coinsnap-bitcoin-paywall')?></option>
+              <option value="dark" <?php selected($theme, 'dark'); ?>><?php echo esc_html_e('Dark','coinsnap-bitcoin-paywall')?></option>
             </select>
           </td>
         </tr>
@@ -162,9 +159,9 @@ class Coinsnap_Bitcoin_Paywall_Shortcode_Metabox {
 
       <!-- Shortcode Display -->
       <div class="coinsnap-shortcode-display">
-        <h3>Shortcode</h3>
+        <h3><?php echo esc_html_e('Shortcode','coinsnap-bitcoin-paywall')?></h3>
         <input type="text" class="large-text" readonly value='[paywall_payment id="<?php echo esc_html($post->ID); ?>"]'>
-        <p class="description">Use this shortcode to display the paywall on any page or post.</p>
+        <p class="description"><?php echo esc_html_e('Use this shortcode to display the paywall on any page or post.','coinsnap-bitcoin-paywall')?></p>
       </div>
 		<?php
 	}

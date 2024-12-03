@@ -139,8 +139,7 @@ class Coinsnap_Bitcoin_Paywall_Settings {
 				break;
 
 			case 'text':
-				echo '<input 
-                type="text" 
+				echo '<input type="text" 
                 id="' . esc_attr( $field_id ) . '" 
                 name="coinsnap_bitcoin_paywall_options[' . esc_attr( $field_id ) . ']" 
                 value="' . esc_attr( $field_value ) . '" 
@@ -192,15 +191,15 @@ class Coinsnap_Bitcoin_Paywall_Settings {
 
 	// Optional section callbacks for additional descriptions
 	public function provider_section_callback() {
-		echo '<p>Select your preferred payment provider and configure its settings below.</p>';
+		echo esc_html_e('Select your preferred payment provider and configure its settings below.','coinsnap-bitcoin-paywall');
 	}
 
 	public function coinsnap_section_callback() {
-		echo '<p>Enter your Coinsnap credentials here if you selected Coinsnap as your payment provider.</p>';
+		echo esc_html_e('Enter your Coinsnap credentials here if you selected Coinsnap as your payment provider.','coinsnap-bitcoin-paywall');
 	}
 
 	public function btcpay_section_callback() {
-		echo '<p>Enter your BTCPay credentials here if you selected BTCPay as your payment provider.</p>';
+		echo esc_html_e('Enter your BTCPay credentials here if you selected BTCPay as your payment provider.','coinsnap-bitcoin-paywall');
 	}
 
 	public function add_menu_page() {
