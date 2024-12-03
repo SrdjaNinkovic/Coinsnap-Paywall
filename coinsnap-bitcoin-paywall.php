@@ -153,7 +153,7 @@ class CoinsnapBticoinPaywall {
 		$handler = $this->get_provider_handler( $provider );
 
 		if ( ! $handler ) {
-			wp_send_json_error( [ 'message' => 'Invalid provider' ] );
+                    wp_send_json_error( [ 'message' => 'Invalid provider' ] );
 		}
 
 		$invoice = $handler->createInvoice( $price, $currency, $redirectUrl );
@@ -170,7 +170,8 @@ class CoinsnapBticoinPaywall {
 
 			wp_send_json_success( [ 'invoice_url' => $invoice['data']['checkoutLink'] ] );
 		} else {
-			error_log( 'Invoice creation failed: ' . print_r( $invoice, true ) );
+			// Debug Invoice creation
+                        //error_log( 'Invoice creation failed: ' . print_r( $invoice, true ) );
 			wp_send_json_error( [ 'message' => 'Failed to create invoice' . $invoice["body"] ] );
 		}
 	}
@@ -208,8 +209,8 @@ class CoinsnapBticoinPaywall {
 
 		$access = $wpdb->get_row( $wpdb->prepare(
 			"SELECT * FROM %i WHERE post_id = %d AND session_id = %s AND access_expires > NOW()",
-			$table_name, $post_id, $session_id
-		) );
+			$table_name, $post_id, $session_id)
+                );
 
 		return $access !== null;
 	}
@@ -220,8 +221,9 @@ class CoinsnapBticoinPaywall {
 		}
 		// Get and use the session ID
 		$session_id = session_id();
-		// Debug incoming data
-		error_log( print_r( $_POST, true ) );
+		
+                // Debug incoming data
+		//error_log( print_r( $_POST, true ) );
 
 		if ( empty( filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ) || empty( filter_input( INPUT_POST, 'duration', FILTER_VALIDATE_INT ) ) ) {
 			wp_send_json_error( 'Missing required parameters' );
@@ -231,7 +233,7 @@ class CoinsnapBticoinPaywall {
 		$duration = intval( filter_input( INPUT_POST, 'duration', FILTER_VALIDATE_INT ) );
 
 		// Debug session_id
-		error_log( 'Session ID: ' . $session_id );
+		//error_log( 'Session ID: ' . $session_id );
 
 		if ( ! $session_id ) {
 			wp_send_json_error( 'Session not initialized' );
@@ -250,7 +252,8 @@ class CoinsnapBticoinPaywall {
 
 		// Debug query execution
 		if ( $result === false ) {
-			error_log( 'Database Error: ' . $wpdb->last_error );
+                    //  Debug Database Error
+                    //error_log( 'Database Error: ' . $wpdb->last_error );
 			wp_send_json_error( 'Database insertion failed' );
 		}
 
@@ -279,25 +282,21 @@ class CoinsnapBticoinPaywall {
 	}
 
 
-	private function process_native_content( $content, $has_access ) {
-		if ( strpos( $content, '[paywall_payment' ) !== false ) {
-			if ( $has_access ) {
-				$content = preg_replace( '/\[paywall_payment[^\]]*\]/', '', $content );
-				return $content;
-
-      } else {
-
-				// Restrict content and show paywall up to the shortcode
-				$parts           = explode( '[paywall_payment', $content );
-				$shortcode_parts = explode( ']', $parts[1], 2 );
-				$shortcode       = '[paywall_payment' . $shortcode_parts[0] . ']';
-
-				return $parts[0] . $shortcode;
-			}
+	private function process_native_content( $content, $has_access ){
+            if ( strpos( $content, '[paywall_payment' ) !== false ) {
+                if ( $has_access ) {
+                    $content = preg_replace( '/\[paywall_payment[^\]]*\]/', '', $content );
+                    return $content;
+                }
+                else {
+                    // Restrict content and show paywall up to the shortcode
+                    $parts = explode( '[paywall_payment', $content );
+                    $shortcode_parts = explode( ']', $parts[1], 2 );
+                    $shortcode = '[paywall_payment' . $shortcode_parts[0] . ']';
+                    return $parts[0] . $shortcode;
 		}
-
-		return $content; // Return as-is if no shortcode
-
+            }
+            return $content; // Return as-is if no shortcode
 	}
 }
 

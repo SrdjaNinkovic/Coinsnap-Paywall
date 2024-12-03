@@ -36,7 +36,8 @@ class Coinsnap_Bitcoin_Paywall_BTCPayHandler {
 
 		// Enhanced error handling
 		if ( is_wp_error( $response ) ) {
-			error_log( 'BTCPay Invoice Creation Error: ' . $response->get_error_message() );
+                    //  Debug Invoice Creation
+                    //error_log( 'BTCPay Invoice Creation Error: ' . $response->get_error_message() );
 
 			return [
 				'success' => false,
@@ -49,7 +50,8 @@ class Coinsnap_Bitcoin_Paywall_BTCPayHandler {
 
 		// Check HTTP status code
 		if ( $response_code !== 200 ) {
-			error_log( 'BTCPay Invoice Creation HTTP Error: ' . $response_code . ' - ' . $body );
+                    //  Debug Invoice Creation HTTP
+                    //error_log( 'BTCPay Invoice Creation HTTP Error: ' . $response_code . ' - ' . $body );
 
 			return [
 				'success' => false,
@@ -61,7 +63,8 @@ class Coinsnap_Bitcoin_Paywall_BTCPayHandler {
 		$decoded_body = json_decode( $body, true );
 
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			error_log( 'BTCPay Invoice Creation JSON Decode Error: ' . json_last_error_msg() );
+                    //  Debug Invoice Creation JSON
+                    //error_log( 'BTCPay Invoice Creation JSON Decode Error: ' . json_last_error_msg() );
 
 			return [
 				'success'  => false,

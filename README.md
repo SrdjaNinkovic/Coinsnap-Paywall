@@ -1,5 +1,5 @@
 # Coinsnap Bitcoin Paywall #
-![Coinsnap Bitcoin Paywall Plugin for Wordpress](/assets/images/cover.png)
+![Coinsnap Bitcoin Paywall Plugin for Wordpress](/.wordpress.org/cover.png)
 
 ## Wordpress plugin for implementing Paywall using Coinsnap and BTCPay ##
 

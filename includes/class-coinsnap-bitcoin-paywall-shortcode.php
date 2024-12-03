@@ -37,18 +37,15 @@ class Coinsnap_Bitcoin_Paywall_Shortcode {
            data-price="<?php echo esc_attr($price); ?>"
            data-currency="<?php echo esc_attr($currency); ?>"
            data-duration="<?php echo esc_attr($duration); ?>"
-           data-post-id="<?php echo esc_html(get_the_ID()); ?>"
-      >
+           data-post-id="<?php echo esc_html(get_the_ID()); ?>">
         <h2><?php echo esc_html($shortcode_post->post_title); ?></h2>
         <p><?php echo esc_html($description); ?></p>
         <div class="price-display">
 			<?php echo esc_html($price) . ' ' . esc_html($currency); ?>
         </div>
-        <button class="paywall-payment-button">
-			<?php echo esc_html($button_text); ?>
-        </button>
+        <button class="paywall-payment-button"><?php echo esc_html($button_text); ?></button>
       </div>
-    <p class="restricted <?php echo esc_attr($theme); ?>">This content is restricted. Please complete payment to access.</p>
+    <p class="restricted <?php echo esc_attr($theme); ?>"><?php echo esc_html_e('This content is restricted. Please complete payment to access.','coinsnap-bitcoin-paywall')?></p>
 
 		<?php
 		return ob_get_clean();
