@@ -5,3 +5,13 @@
   border: 1px solid #ddd;
   background: #f9f9f9;
 }
+
+.coinsnap-connection-test {
+  margin: 20px 0 10px;
+  padding-top: 15px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.coinsnap-connection-test .button {
+  margin-right: 10px;
+}
