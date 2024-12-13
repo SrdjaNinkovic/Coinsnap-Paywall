@@ -10,6 +10,8 @@ class Coinsnap_Bitcoin_Paywall_Settings {
 		// Register menus
 		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
+	  add_action( 'update_option_coinsnap_bitcoin_paywall_options', [ $this, 'test_connection_on_save' ], 10, 2 );
+	  add_action( 'admin_notices', [ $this, 'display_connection_test_notice' ] );
 
 		// Instantiate the shortcode class
 		$this->shortcode_class = new Coinsnap_Bitcoin_Paywall_Shortcode();
@@ -260,6 +262,7 @@ class Coinsnap_Bitcoin_Paywall_Settings {
 		?>
       <div class="wrap">
         <h1><?php esc_html_e( 'Coinsnap Bitcoin Paywall Settings', 'coinsnap-bitcoin-paywall' ); ?></h1>
+
         <form method="post" action="options.php">
 			<?php
 			// Render settings fields
@@ -271,13 +274,11 @@ class Coinsnap_Bitcoin_Paywall_Settings {
 			// Render Coinsnap settings
 			echo '<div id="coinsnap-settings-wrapper" class="provider-settings">';
 			$this->render_section( 'coinsnap_bitcoin_paywall_coinsnap_section' );
-			$this->render_connection_test_button( 'coinsnap' );
 			echo '</div>';
 
 			// Render BTCPay settings
 			echo '<div id="btcpay-settings-wrapper" class="provider-settings">';
 			$this->render_section( 'coinsnap_bitcoin_paywall_btcpay_section' );
-			$this->render_connection_test_button( 'btcpay' );
 			echo '</div>';
 
 			// Render submit button
@@ -288,34 +289,85 @@ class Coinsnap_Bitcoin_Paywall_Settings {
 		<?php
 	}
 
-	/**
-	 * Render a connection test button for a specific provider.
-	 *
-	 * @param string $provider The provider name (e.g., 'coinsnap', 'btcpay').
-	 */
-	private function render_connection_test_button( $provider ) {
-		$url = add_query_arg(
-			[
-				'page' => 'coinsnap_bitcoin_paywall',
-				'coinsnap_test_connection' => 1,
-				'provider' => $provider,
-			],
-			admin_url( 'admin.php' )
-		);
+	public function display_connection_test_notice() {
+		// Only show on the plugin settings page
+		$screen = get_current_screen();
+		if ( $screen->id !== 'toplevel_page_coinsnap_bitcoin_paywall' ) {
+			return;
+		}
 
-		?>
-      <div class="coinsnap-connection-test">
-        <a href="<?php echo esc_url( $url ); ?>" class="button button-secondary">
-			<?php
-			printf(
-			/* translators: %s: Provider name */
-				esc_html__( 'Test %s Connection', 'coinsnap-bitcoin-paywall' ),
-				ucfirst( $provider )
-			);
+		// Retrieve the connection test result
+		$connection_result = get_option( 'coinsnap_bitcoin_paywall_connection_result' );
+
+		if ( $connection_result ) {
+			$class = $connection_result['success'] ? 'notice-success' : 'notice-error';
 			?>
-        </a>
-      </div>
-		<?php
+          <div class="notice <?php echo esc_attr( $class ); ?> is-dismissible">
+            <p><?php echo esc_html( $connection_result['message'] ); ?></p>
+          </div>
+			<?php
+		}
+	}
+
+	public function test_connection_on_save( $old_options, $new_options ) {
+		// Ensure we have a provider selected
+		if ( !isset( $new_options['provider'] ) ) {
+			return;
+		}
+
+		$connection_result = [
+			'success' => false,
+			'message' => __( 'Connection test failed', 'coinsnap-bitcoin-paywall' )
+		];
+
+		try {
+			$handler = null;
+
+			// Select handler based on provider
+			if ( $new_options['provider'] === 'coinsnap' ) {
+				// Ensure required Coinsnap credentials are present
+				if ( empty( $new_options['coinsnap_store_id'] ) || empty( $new_options['coinsnap_api_key'] ) ) {
+					$connection_result['message'] = __( 'Coinsnap Store ID or API Key is missing', 'coinsnap-bitcoin-paywall' );
+					update_option( 'coinsnap_bitcoin_paywall_connection_result', $connection_result );
+					return;
+				}
+
+				$handler = new Coinsnap_Bitcoin_Paywall_CoinsnapHandler(
+					$new_options['coinsnap_store_id'],
+					$new_options['coinsnap_api_key']
+				);
+			} elseif ( $new_options['provider'] === 'btcpay' ) {
+				// Ensure required BTCPay credentials are present
+				if (
+					empty( $new_options['btcpay_store_id'] ) ||
+					empty( $new_options['btcpay_api_key'] ) ||
+					empty( $new_options['btcpay_url'] )
+				) {
+					$connection_result['message'] = __( 'BTCPay Store ID, API Key, or URL is missing', 'coinsnap-bitcoin-paywall' );
+					update_option( 'coinsnap_bitcoin_paywall_connection_result', $connection_result );
+					return;
+				}
+
+				$handler = new Coinsnap_Bitcoin_Paywall_BTCPayHandler(
+					$new_options['btcpay_store_id'],
+					$new_options['btcpay_api_key'],
+					$new_options['btcpay_url']
+				);
+			}
+
+			// Perform connection test
+			if ( $handler ) {
+				$connection_result = $handler->testConnection();
+			}
+		} catch ( Exception $e ) {
+			$connection_result['message'] = sprintf(
+				__( 'Connection test error: %s', 'coinsnap-bitcoin-paywall' ),
+				$e->getMessage()
+			);
+		}
+
+		// Persist the connection result
+		update_option( 'coinsnap_bitcoin_paywall_connection_result', $connection_result );
 	}
 }
 
