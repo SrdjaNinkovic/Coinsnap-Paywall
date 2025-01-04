@@ -211,6 +211,8 @@ If you want to place a paywall before the download of a video, create a short de
 
 Go to the test payment page by copied URL. Click on payment button and go to the payment page. 
 
+![Test payment](https://resources.coinsnap.org/products/paywall/images/screenshot-11.png)
+
 This payment page shows your customer the amount payable in SATS. Click on “view Details” for further information. 
 
 Then you see the QR code. Hold your wallet above it and the amount of SATS displayed above will be transferred from your wallet to the Coinsnap wallet as soon as you click the button “pay”.
