@@ -16,18 +16,18 @@ The Coinsnap Paywall plugin allows you to implement Paywall and accept Bitcoin L
 
 ## Description ##
 
-The [Coinsnap](https://coinsnap.io/en/) Bitcoin Paywall protects your high-quality content and ensures that you are fairly remunerated for your work.
+The [Coinsnap](https://coinsnap.io/en/) Coinsnap Paywall protects your high-quality content and ensures that you are fairly remunerated for your work.
 
-It allows you to build up a sustainable source of income and be less dependent on advertising revenue or sponsors. With your Coinsnap Bitcoin paywall, you can target loyal users who are willing to pay, which leads to a high-quality community in the long term.
+It allows you to build up a sustainable source of income and be less dependent on advertising revenue or sponsors. With your Coinsnap Paywall, you can target loyal users who are willing to pay, which leads to a high-quality community in the long term.
 
-* Coinsnap Bitcoin Paywall Demo Site: https://btcpaywall.com/en/
+* Coinsnap Paywall Demo Site: https://btcpaywall.com/en/
 * Blog Article: https://coinsnap.io/en/coinsnap-for-btcpaywall-payment-plugin/
-* WordPress: https://wordpress.org/plugins/coinsnap-bitcoin-paywall/
+* WordPress: https://wordpress.org/plugins/coinsnap-paywall/
 * GitHub: https://github.com/Coinsnap/Coinsnap-Paywall
 
-## Bitcoin and Lightning payments in Coinsnap Bitcoin Paywall ##
+## Bitcoin and Lightning payments in Coinsnap Paywall ##
 
-The Coinsnap Bitcoin Paywall allows you to accept Bitcoin for exclusive content and clearly differentiate your offer from the competition.
+The Coinsnap Paywall allows you to accept Bitcoin for exclusive content and clearly differentiate your offer from the competition.
 
 This is how you create added value – both for yourself and for the growing target group of Bitcoin customers!
 
@@ -91,10 +91,10 @@ If you want to use another BTCPay server as Payment provider, you need to know y
 
 1.1 Install the Coinsnap Paywall plug-in from the WordPress directory
 
-The Coinsnap Bitcoin Paywall can be searched in the WordPress plugin directory.
+The Coinsnap Paywall can be searched in the WordPress plugin directory.
 
 In your WordPress instance, go to the Plugins > Add New section.
-In the search you enter Coinsnap and get as a result the Coinsnap Bitcoin Paywall plugin displayed.
+In the search you enter Coinsnap and get as a result the Coinsnap Paywall plugin displayed.
 
 1.2. Install the Coinsnap Paywall plug-in from Github page
 
@@ -115,23 +115,23 @@ When you click on it, the menu opens and Download ZIP appears.
 1.4. After successful installation, click Activate and then you can start setting up the plugin.
 
 
-### 2. Connect Coinsnap account with Bitcoin Paywall ###
+### 2. Connect payment gateway to Coinsnap Paywall ###
 
 After you have installed and activated the Coinsnap Paywall, you must make the Coinsnap or BTCPay settings. You can find these in the sidebar on the left under “Coinsnap Paywall”.
 
-2.1. Connect Coinsnap account with Bitcoin Paywall
+2.1. Connect Coinsnap account with Coinsnap Paywall
 
 Simply enter your Coinsnap Store ID and your API key there; you can find these in your Coinsnap account under “Settings”, “Coinsnap Store Settings”.
 
-![Connect Coinsnap account with Bitcoin Paywall](https://resources.coinsnap.org/products/paywall/images/screenshot-4.png)
+![Connect Coinsnap account with Coinsnap Paywall](https://resources.coinsnap.org/products/paywall/images/screenshot-4.png)
 
 If you don’t have a Coinsnap account yet, you can do so via the link shown: Coinsnap Registration
 
-2.2. Connect BTCPay account with Bitcoin Paywall 
+2.2. Connect BTCPay account with Coinsnap Paywall 
 
 Switch the select box "Payment Provider" to BTCPay and enter your BTCPay Store ID, API key and Server URL.
 
-![Connect BTCPay account with Bitcoin Paywall](https://resources.coinsnap.org/products/paywall/images/screenshot-5.png)
+![Connect BTCPay account with Coinsnap Paywall](https://resources.coinsnap.org/products/paywall/images/screenshot-5.png)
 
 Please note that all your Coinsnap Paywall payment widgets will connect to the active payment provider: Coinsnap or BTCPay.
 
@@ -171,11 +171,11 @@ https://coinsnap.io/lightning-wallet-mit-lightning-adresse/
 After saving settings you can use Store ID and Api Key on the step 2.
 
 
-### 4. Configure Coinsnap Bitcoin Paywall ####
+### 4. Configure Coinsnap Paywall ####
 
 ### 4.1. Create a paywall shortcode ###
 
-Go to Coinsnap Bitcoin Paywall in the sideboard on the left in your WordPress and click on Paywall Shortcodes. Then click on “Add New Paywall Shortcode” at the top.
+Go to Coinsnap Paywall in the sideboard on the left in your WordPress and click on Paywall Shortcodes. Then click on “Add New Paywall Shortcode” at the top.
 
 ![Create a paywall shortcode](https://resources.coinsnap.org/products/paywall/images/screenshot-6.png)
 
@@ -195,4 +195,25 @@ In the window that now appears, make the following settings (see orange entries)
 ![Configure your paywall shortcode](https://resources.coinsnap.org/products/paywall/images/screenshot-7.png)
 
 Now you can copy the shortcode at the bottom and use it in your content.
+
+### 5. Prepare restricted content ###
+
+5.1. Create content
+
+Now create content as usual in your WordPress, for example a text as in this example. As soon as you have finished the article, you must place the shortcode you have just produced at the point where you expect your reader to pay. You usually do this after the introductory paragraph.
+
+**Tip:**
+If you want to place a paywall before the download of a video, create a short description of the video content as an introduction and place an image of the start screen of the video next to it. This way, your users can see what to expect and why they want to pay for the video!
+
+5.2. Save your post or page and find paywall widget by its URL.
+
+### 6. Test payment ###
+
+Go to the test payment page by copied URL. Click on payment button and go to the payment page. 
+
+This payment page shows your customer the amount payable in SATS. Click on “view Details” for further information. 
+
+Then you see the QR code. Hold your wallet above it and the amount of SATS displayed above will be transferred from your wallet to the Coinsnap wallet as soon as you click the button “pay”.
+
+![QR code](https://resources.coinsnap.org/products/paywall/images/screenshot-12.png)
 
