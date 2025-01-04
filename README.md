@@ -38,7 +38,7 @@ Simply register on [Coinsnap](https://app.coinsnap.io/register), enter your own 
 If you want to use another BTCPay server as Payment provider, you need to know your store ID, your API key and gateway URL as required parameters.
 
 
-## Features: ##
+## Features ##
 
 * **All you need is your email and a Lightning Wallet with a Lightning address. [Here you can find an overview of suitable Lightning Wallets](https://coinsnap.io/en/lightning-wallet-with-lightning-address/)**
 
@@ -114,11 +114,15 @@ If you don’t have a Coinsnap account yet, you can do so via the link shown: Co
 
 Now go to the Coinsnap website at: https://app.coinsnap.io/register and open an account by entering your email address and a password of your choice.
 
-If you are using a Lightning Wallet with Lightning Login, then you can also open a Coinsnap account with it.
+![Create a Coinsnap Account](https://resources.coinsnap.org/products/paywall/images/screenshot-8.png)
+
+If you are using a Lightning Wallet with Lightning Login, then you can also open a Coinsnap account with it. 	
 
 ### 3.2. Confirm email address ####
 
 You will receive an email to the given email address with a confirmation link, which you have to confirm. If you do not find the email, please check your spam folder.
+
+![Confirm email address](https://resources.coinsnap.org/products/paywall/images/screenshot-9.png)
 
 Then please log in to the Coinsnap backend with the appropriate credentials.
 
@@ -131,6 +135,8 @@ In the Website Name field, enter the name of your online store that you want cus
 In the Lightning Address field, enter the Lightning address to which the Bitcoin and Lightning transactions should be forwarded.
 
 A Lightning address is similar to an e-mail address. Lightning payments are forwarded to this Lightning address and paid out. If you don’t have a Lightning address yet, set up a Lightning wallet that will provide you with a Lightning address.
+
+![Set up website at Coinsnap](https://resources.coinsnap.org/products/paywall/images/screenshot-10.png)
 
 For more information on Lightning addresses and the corresponding Lightning wallet providers, click here:
 https://coinsnap.io/lightning-wallet-mit-lightning-adresse/
@@ -155,7 +161,7 @@ In the window that now appears, make the following settings (see orange entries)
 * Set your price!
 * Select the currency in which the price is to be displayed
 * Set the duration of the activation and
-* select the color scheme of the paywall.
+* Select the color scheme of the paywall.
 
-Now you can copy the shortcode at the bottom and use it in your content! 
+Now you can copy the shortcode at the bottom and use it in your content.
 
