@@ -87,26 +87,53 @@ If you want to use another BTCPay server as Payment provider, you need to know y
 
 ## Installation ##
 
-### 1. Install the Coinsnap Bitcoin Paywall plug-in from the WordPress directory. ###
+### 1. Install the Coinsnap Paywall ###
 
-The Coinsnap Bitcoin Paywall can be searched and installed in the WordPress plugin directory.
+1.1 Install the Coinsnap Paywall plug-in from the WordPress directory
+
+The Coinsnap Bitcoin Paywall can be searched in the WordPress plugin directory.
 
 In your WordPress instance, go to the Plugins > Add New section.
 In the search you enter Coinsnap and get as a result the Coinsnap Bitcoin Paywall plugin displayed.
 
-Then click Install.
+1.2. Install the Coinsnap Paywall plug-in from Github page
 
-After successful installation, click Activate and then you can start setting up the plugin.
+If you want to install the Coinsnap Paywall, you must first download it from the Coinsnap Github page here. Then look for the green button labeled “Code”.
+
+![Install the Coinsnap Paywall plug-in from Github page](https://resources.coinsnap.org/products/paywall/images/screenshot-2.jpg)
+
+Install it via the “Upload Plugin” function:
+
+Navigate to Plugins > Add New Plugin > Upload Plugin and select the zip-archive you’ve downloaded from Github.
+
+![Install via the “Upload Plugin” function](https://resources.coinsnap.org/products/paywall/images/screenshot-3.png)
+
+When you click on it, the menu opens and Download ZIP appears.
+
+1.3. Then click Install.
+
+1.4. After successful installation, click Activate and then you can start setting up the plugin.
 
 
 ### 2. Connect Coinsnap account with Bitcoin Paywall ###
 
-After you have installed and activated the Coinsnap Bitcoin Paywall, you must make the Coinsnap settings. You can find these in the sidebar on the left under “Coinsnap Bitcoin Paywall”.
+After you have installed and activated the Coinsnap Paywall, you must make the Coinsnap or BTCPay settings. You can find these in the sidebar on the left under “Coinsnap Paywall”.
 
-Simply enter your Coinsnap Store ID and your API key there; you can find these in your Coinsnap account under “Settings”, “Coinsnap Shop Settings”.
+2.1. Connect Coinsnap account with Bitcoin Paywall
+
+Simply enter your Coinsnap Store ID and your API key there; you can find these in your Coinsnap account under “Settings”, “Coinsnap Store Settings”.
+
+![Connect Coinsnap account with Bitcoin Paywall](https://resources.coinsnap.org/products/paywall/images/screenshot-4.png)
 
 If you don’t have a Coinsnap account yet, you can do so via the link shown: Coinsnap Registration
 
+2.2. Connect BTCPay account with Bitcoin Paywall 
+
+Switch the select box "Payment Provider" to BTCPay and enter your BTCPay Store ID, API key and Server URL.
+
+![Connect BTCPay account with Bitcoin Paywall](https://resources.coinsnap.org/products/paywall/images/screenshot-5.png)
+
+Please note that all your Coinsnap Paywall payment widgets will connect to the active payment provider: Coinsnap or BTCPay.
 
 ### 3. Create Coinsnap account ####
 
@@ -150,8 +177,10 @@ After saving settings you can use Store ID and Api Key on the step 2.
 
 Go to Coinsnap Bitcoin Paywall in the sideboard on the left in your WordPress and click on Paywall Shortcodes. Then click on “Add New Paywall Shortcode” at the top.
 
+![Create a paywall shortcode](https://resources.coinsnap.org/products/paywall/images/screenshot-6.png)
 
-### 4.2. configure your paywall shortcode ####
+
+### 4.2. Configure your paywall shortcode ####
 
 In the window that now appears, make the following settings (see orange entries):
 
@@ -162,6 +191,8 @@ In the window that now appears, make the following settings (see orange entries)
 * Select the currency in which the price is to be displayed
 * Set the duration of the activation and
 * Select the color scheme of the paywall.
+
+![Configure your paywall shortcode](https://resources.coinsnap.org/products/paywall/images/screenshot-7.png)
 
 Now you can copy the shortcode at the bottom and use it in your content.
 
