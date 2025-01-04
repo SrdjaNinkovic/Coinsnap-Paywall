@@ -1,5 +1,5 @@
-# Coinsnap Bitcoin Paywall #
-![Coinsnap Bitcoin Paywall Plugin for Wordpress](/.wordpress.org/cover.png)
+# Coinsnap Paywall #
+![Coinsnap Paywall Plugin for Wordpress](https://resources.coinsnap.org/products/paywall/images/cover.png)
 
 ## Wordpress plugin for implementing Paywall using Coinsnap and BTCPay ##
 
@@ -12,7 +12,7 @@
 * License: GPL2
 * License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-The Coinsnap Bitcoin Paywall plugin allows you to implement Paywall and accept Bitcoin Lightning payments for restricted content.
+The Coinsnap Paywall plugin allows you to implement Paywall and accept Bitcoin Lightning payments for restricted content.
 
 == Description ==
 
