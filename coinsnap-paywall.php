@@ -8,9 +8,7 @@
  * Author URI:         https://coinsnap.io/
  * Text Domain:        coinsnap-paywall
  * Domain Path:         /languages
- * Requires PHP:        8.0
- * Tested up to:        6.7.1
- * Requires at least:   6.2
+ * Tested up to:        6.7
  * License:             GPL2
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -31,6 +29,13 @@ if ( ! defined( 'COINSNAP_PAYWALL_PHP_VERSION' ) ) {
 register_activation_hook( __FILE__, "coinsnap_paywall_activate" );
 register_uninstall_hook( __FILE__, 'coinsnap_paywall_uninstall' );
 add_action( 'admin_init', 'coinsnap_paywall_php_version' );
+add_action( 'init', 'start_custom_session', 1 );
+
+function start_custom_session(){
+    if ( session_status() === PHP_SESSION_NONE ) {
+        session_start();
+    }
+}
 
 function coinsnap_paywall_php_notice() {
 	$versionMessage = sprintf(
@@ -84,35 +89,29 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-coinsnap-paywall-shor
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-coinsnap-paywall-settings.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-coinsnap-paywall-post-type.php';
 
-class CoinsnapBticoinPaywall {
-	public function __construct() {
+class CoinsnapPaywall {
 
-		// Register AJAX handlers for payment initiation
-		add_action( 'wp_ajax_coinsnap_create_invoice', [ $this, 'create_invoice' ] );
-		add_action( 'wp_ajax_nopriv_coinsnap_create_invoice', [ $this, 'create_invoice' ] );
+    public function __construct() {
 
-		// Restrict content
-	  add_action( 'init', [$this, 'start_custom_session'], 1 );
-		add_filter( 'the_content', [ $this, 'restrict_page_content' ] );
+    // Register AJAX handlers for payment initiation
+        add_action( 'wp_ajax_coinsnap_create_invoice', [ $this, 'create_invoice' ] );
+        add_action( 'wp_ajax_nopriv_coinsnap_create_invoice', [ $this, 'create_invoice' ] );
 
-		add_action( 'wp_ajax_check_invoice_status', [ $this, 'check_invoice_status' ] );
-		add_action( 'wp_ajax_nopriv_check_invoice_status', [ $this, 'check_invoice_status' ] );
+    // Restrict content
+        //add_action( 'init', [$this, 'start_custom_session'], 1 );
+        add_filter( 'the_content', [ $this, 'restrict_page_content' ] );
 
-		add_action( 'wp_ajax_coinsnap_paywall_grant_access', [
-			$this,
-			'coinsnap_paywall_grant_access'
-		] );
-		add_action( 'wp_ajax_nopriv_coinsnap_paywall_grant_access', [
-			$this,
-			'coinsnap_paywall_grant_access'
-		] );
-	}
-
+        add_action( 'wp_ajax_check_invoice_status', [ $this, 'check_invoice_status' ] );
+        add_action( 'wp_ajax_nopriv_check_invoice_status', [ $this, 'check_invoice_status' ] );
+        add_action( 'wp_ajax_coinsnap_paywall_grant_access', [$this,'coinsnap_paywall_grant_access'] );
+        add_action( 'wp_ajax_nopriv_coinsnap_paywall_grant_access', [$this,'coinsnap_paywall_grant_access'] );
+    }
+/*
 	function start_custom_session() {
 		if ( session_status() === PHP_SESSION_NONE ) {
 			session_start();
 		}
-	}
+	}*/
 
 	public function check_invoice_status() {
 		if ( null === filter_input( INPUT_POST, 'invoice_id', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ) {
@@ -216,9 +215,10 @@ class CoinsnapBticoinPaywall {
 	}
 
 	public function coinsnap_paywall_grant_access() {
-		if ( session_status() === PHP_SESSION_NONE ) {
+	/*	
+            if ( session_status() === PHP_SESSION_NONE ) {
 			session_start();
-		}
+		}*/
 		// Get and use the session ID
 		$session_id = session_id();
 		
@@ -262,9 +262,10 @@ class CoinsnapBticoinPaywall {
 
 	public function restrict_page_content( $content ) {
 		// Start the session if it hasn't been started already
+            /*
 		if ( session_status() === PHP_SESSION_NONE ) {
 			session_start();
-		}
+		}*/
 
 		// Ensure the session ID is set
 		if ( empty( session_id() ) ) {
@@ -300,4 +301,4 @@ class CoinsnapBticoinPaywall {
 	}
 }
 
-new CoinsnapBticoinPaywall();
+new CoinsnapPaywall();
